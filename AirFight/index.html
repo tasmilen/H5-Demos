@@ -17,7 +17,6 @@
     .enemy1 { width: 38px; height: 28px; background: green; float: left; border: 1px solid white; }
     .enemy2 { width: 38px; height: 28px; background: yellow; float: left; border: 1px solid white; }
     .enemy3 { width: 38px; height: 28px; background: red; float: left; border: 1px solid white; }
-
     
     .air1 { width: 46px; height: 60px; background: #cccccc; position: absolute; }
     .bullet { width: 1px; height: 10px; overflow: hidden; background: white; position: absolute; }
@@ -29,6 +28,8 @@
   </div>
   <script>
     /*
+    敌人和飞机暂时都是用色块代替
+
     元素的生成 crateElement
 
     敌人的移动 setInterval
@@ -53,7 +54,7 @@
 
 
     var Game = {
-      // 定义数据
+      // 敌人数据
       oEnemy: {
         e1 : { style: 'enemy1', blood: 1, speed: 5, score: 1 },
         e2 : { style: 'enemy2', blood: 2, speed: 7, score: 2 },
@@ -99,9 +100,11 @@
         bulletStyle: 'bullet'
       },
 
+      // 关卡
       level: 0,
 
       init: function( id ) { // 初始化
+        // 创建场景父元素
         this.oParent = document.getElementById( id );
 
         this.createScore();
@@ -112,37 +115,37 @@
 
       },
 
-      createScore: function() { //积分的创建
+      createScore: function() {   //积分的创建
         var oS = document.createElement('div');
         oS.id = 'score';
         oS.innerHTML = '积分:<span>0</span>';
         this.oParent.appendChild(oS);
 
         this.oSNum = oS.getElementsByTagName('span')[0];
-
-        console.log(this.oSNum.innerHTML);
       },
 
-      createEnemy: function( level ) {
+      createEnemy: function( level ) {    // 生成关卡
+        document.title = '第' + level + '关';
+
+        // 创建下一关时,先清理上一关的遗留
         if (this.oUI) {
           clearInterval( this.oUI.timer );
           clearInterval( this.oUI.timer2 );
           this.oParent.removeChild( this.oUI );
         }
 
-        document.title = '第' + level + '关';
-
         var gk = this.gk[ level ];
         var arr = [];
-
         var oUI = document.createElement('ul');
+        this.oParent.appendChild( oUI );
+        // 在添加到节点树后
 
         oUI.id = 'bee';
         oUI.style.width = gk.colNum * 40 + 'px';
-        this.oParent.appendChild( oUI );
-        // 在添加到节点树后
+        
         oUI.style.left = (this.oParent.offsetWidth - oUI.offsetWidth) / 2 + 'px';
-        this.oUI = oUI; // 定义为属性，方便其他方法调用
+
+        this.oUI = oUI; // 定义为全局属性，方便在其他方法调用
 
         for (var i = 0; i < gk.eMap.length; i++) {
           var oLi = document.createElement('li');
@@ -156,6 +159,7 @@
 
         this.aLi = oUI.getElementsByTagName('li');
 
+        // 初始 ul中的li为float,需要转换成绝对定位
         for (var m = 0; m < this.aLi.length; m++) {
           arr.push( [this.aLi[m].offsetLeft, this.aLi[m].offsetTop] )
         }
@@ -196,7 +200,7 @@
 
       },
 
-      oneMove: function() {   //单兵作战
+      oneMove: function() {   // 单兵作战
         var curLi = this.aLi[ Math.floor(Math.random() * this.aLi.length)];
         var self = this;
         curLi.timer = setInterval(function() {
@@ -218,7 +222,7 @@
         }, 30);
       },
 
-      createAir: function() {
+      createAir: function() {   // 创建飞机
         var oA = document.createElement('div');
         this.oA = oA;
         oA.className = this.air.style;
@@ -230,7 +234,7 @@
         this.bindAir();
       },
 
-      bindAir: function() {
+      bindAir: function() {     // 添加对飞机的控制
 
         var timer = null;
         var iNum = 0;
@@ -284,7 +288,7 @@
         this.runBullet( oB );
       },
 
-      runBullet: function( oB ) {
+      runBullet: function( oB ) {   // 子弹的运动
         var This = this;
         oB.timer = setInterval(function() {
           if (oB.offsetTop < -oB.offsetHeight) {
@@ -339,10 +343,6 @@
           return true;
         }
       }
-
-
-
-
     }
   </script>
 </body>
