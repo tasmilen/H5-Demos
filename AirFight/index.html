@@ -183,13 +183,13 @@
         This.oUI.timer = setInterval(function() {
           if (This.oUI.offsetLeft > R) {
             gk.iSpeedX *= -1;
-            This.oUI.style.top = This.oUI.offsetTop + gk.iSpeedY + 'px';
+			This.oUI.style.left = This.oUI.offsetLeft + gk.iSpeedX + 'px';
           } else if (This.oUI.offsetLeft < L) {
             gk.iSpeedX *= -1;
-            This.oUI.style.top = This.oUI.offsetTop + gk.iSpeedY + 'px';
+            This.oUI.style.left = This.oUI.offsetLeft + gk.iSpeedX + 'px';
           }
-
-          This.oUI.style.left = This.oUI.offsetLeft + gk.iSpeedX + 'px';
+		  
+		  This.oUI.style.top = This.oUI.offsetTop + gk.iSpeedY + 'px';
         }, 200);
 
         This.oUI.timer2 = setInterval(function(){
