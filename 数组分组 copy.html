@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>数组分组</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta name="renderer" content="webkit">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      body {
+        font-size: 14px;
+        font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
+        color: #27282b;
+        background: #fff;
+      }
+      a {
+        text-decoration: none;
+        color: #27282b;
+      }
+      *,
+      *::before,
+      *::after {
+        outline: none;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      .d1 {
+        width: 50%;
+        height: 100px;
+        background: #eee;
+        user-select: none;
+        margin: 0 auto 50px auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper" id="app">
+    </div>
+
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script>
+      'use strict'
+      let vm = new Vue({
+        el: '#app',
+        data() {
+          return {
+            max: 10,
+            arr: [1, 10, 9, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 1, ],
+            targetArr: [],
+          }
+        },
+        methods: {
+          sortDataArr() {
+            this.arr = this.arr.sort((a, b) => {
+              return b - a;
+            });
+          },
+          splitArr( array ) {
+            console.time();
+            this.sortDataArr();
+            let len = this.arr.length;
+            let half = this.max / 2;
+            for (let i = 0; i < len; i++) {
+              let curValue = this.arr[i];
+              if (curValue > half || this.pushToTarget(curValue)) {
+                let arr = [curValue];
+                arr.sum = curValue;
+                this.targetArr.push(arr);
+              }
+            }
+            console.timeEnd();
+          },
+          pushToTarget( value ) {
+            let length = this.targetArr.length;
+            let isAdd = true;
+            if (!length) {
+              let arr = [];
+              arr.sum = 0;
+              this.targetArr.push(arr);
+            }
+            for (let i = 0; i < length; i++) {
+              let curTarArr = this.targetArr[i];
+              if (curTarArr.sum + value <= this.max) {
+                isAdd = false;
+                curTarArr.push(value);
+                curTarArr.sum += value;
+                break;
+              }
+            }
+
+            return isAdd;
+          },
+        },
+        mounted() {
+          console.time();
+          // 10000长度的随机数组
+          let i = 0;
+          while(i < 10000) {
+            let randomNum = Math.ceil(Math.random() * 10);
+            this.arr[i] = randomNum;
+            i += 1;
+          }
+          console.timeEnd();
+          
+          console.log('start');
+          this.splitArr();
+          console.log('result: ', this.targetArr);
+          
+        },
+      })
+    </script>
+  <!-- Code injected by live-server -->
+<script type="text/javascript">
+ // <![CDATA[  <-- For SVG support
+ if ('WebSocket' in window) {
+  (function () {
+   function refreshCSS() {
+    var sheets = [].slice.call(document.getElementsByTagName("link"));
+    var head = document.getElementsByTagName("head")[0];
+    for (var i = 0; i < sheets.length; ++i) {
+     var elem = sheets[i];
+     var parent = elem.parentElement || head;
+     parent.removeChild(elem);
+     var rel = elem.rel;
+     if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+      var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+      elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+     }
+     parent.appendChild(elem);
+    }
+   }
+   var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+   var address = protocol + window.location.host + window.location.pathname + '/ws';
+   var socket = new WebSocket(address);
+   socket.onmessage = function (msg) {
+    if (msg.data == 'reload') window.location.reload();
+    else if (msg.data == 'refreshcss') refreshCSS();
+   };
+   if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+    console.log('Live reload enabled.');
+    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+   }
+  })();
+ }
+ else {
+  console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+ }
+ // ]]>
+</script></body>
+</html>
