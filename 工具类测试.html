@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>json格式化测试</title>
+    <meta
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+      name="viewport"
+    />
+    <meta name="renderer" content="webkit" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      body {
+        font-size: 14px;
+        font-family: -apple-system, PingFang SC, Hiragino Sans GB,
+          Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
+        color: #27282b;
+        background: #fff;
+      }
+      a {
+        text-decoration: none;
+        color: #27282b;
+      }
+      *,
+      *::before,
+      *::after {
+        outline: none;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      .d1 {
+        width: 50%;
+        height: 100px;
+        background: #eee;
+        user-select: none;
+        margin: 0 auto 50px auto;
+      }
+      .wrapper {
+        height: 100%;
+      }
+      .special {
+        height: 2rem;
+        background: blue;
+      }
+      .special2 {
+        height: 2rem;
+        background: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper" id="app">
+      <button class="btn" @click="handleClick">按钮</button>
+      <div class="test">XXXXXX</div>
+      <div id="counter"></div>
+      <div class="special"></div>
+    </div>
+
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script src="./utils.js"></script>
+    <script>
+      'use strict';
+      let vm = new Vue({
+        el: '#app',
+        data() {
+          return {
+            arr: [],
+            formatted: '',
+            objectData: {
+              name: 'testData',
+              type: 'dir',
+              size: 727347234,
+            }
+          };
+        },
+        methods: {
+          handleClick() {
+            console.log('clicked')
+          }
+        },
+        mounted() {
+          console.log(document.querySelector('#app').classList)
+          console.log('this has class wrapper', hasClass(document.querySelector('#app'), 'wrapper'))
+        }
+      });
+    </script>
+  </body>
+</html>

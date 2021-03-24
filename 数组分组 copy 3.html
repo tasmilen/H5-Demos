@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>数组分组</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta name="renderer" content="webkit">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      body {
+        font-size: 14px;
+        font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
+        color: #27282b;
+        background: #fff;
+      }
+      a {
+        text-decoration: none;
+        color: #27282b;
+      }
+      *,
+      *::before,
+      *::after {
+        outline: none;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      .d1 {
+        width: 50%;
+        height: 100px;
+        background: #eee;
+        user-select: none;
+        margin: 0 auto 50px auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper" id="app">
+    </div>
+
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script>
+      'use strict'
+      let vm = new Vue({
+        el: '#app',
+        data() {
+          return {
+            max: 10,
+            arr: [1, 10, 9, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 1, ],
+            targetArr: [],
+          }
+        },
+        methods: {
+          sortDataArr() {
+            this.arr = this.arr.sort((a, b) => {
+              return b - a;
+            });
+          },
+          splitArr( array ) {
+            console.time();
+            this.sortDataArr();
+            let len = this.arr.length;
+            let half = this.max / 2;
+            for (let i = 0; i < len; i++) {
+              let value = this.arr[i];
+              if (value > half) {
+                let arr = [value];
+                arr.sum = value;
+                this.targetArr[i] = arr;
+              } else {
+                this.pushToTarget(value);
+              }
+            }
+            console.timeEnd();
+          },
+
+          addNew(value) {
+            let arr = [value];
+            arr.sum = value;
+            this.targetArr.push(arr);
+          },
+          
+          pushToTarget( value ) {
+            let length = this.targetArr.length;
+            if (!length) {
+              this.addNew(value);
+              return true
+            }
+            for (let i = 0; i < length; i++) {
+              let curTarArr = this.targetArr[i];
+              if (curTarArr.sum + value <= this.max) {
+                curTarArr.push(value);
+                curTarArr.sum += value;
+                return false;
+              }
+            }
+            
+            this.addNew(value);
+            return true;
+          },
+        },
+        mounted() {
+          console.time();
+          // 10000长度的随机数组 当超过30000，分组耗时超过20秒
+          let i = 0;
+          while(i < 10000) {
+            let randomNum = Math.ceil(Math.random() * 10);
+            this.arr[i] = randomNum;
+            i += 1;
+          }
+          console.timeEnd();
+          
+          console.log('start');
+          this.splitArr();
+          console.log('result: ', this.targetArr);
+          
+        },
+      })
+    </script>
+</body>
+</html>
