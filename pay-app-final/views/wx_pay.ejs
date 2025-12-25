@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微信支付</title>
+</head>
+<body>
+  <h2>微信公众号支付</h2>
+  <script>
+    wx.ready(function() {
+      // 发起支付请求
+      wx.chooseWXPay({
+        timestamp: '<%= payParams.timestamp %>', // 支付签名时间戳
+        nonceStr: '<%= payParams.nonceStr %>', // 支付签名随机串
+        package: '<%= payParams.package %>', // 统一支付接口返回的 prepay_id 参数值
+        signType: '<%= payParams.signType %>', // 签名方式，默认为'SHA1'
+        paySign: '<%= payParams.paySign %>', // 支付签名
+        success: function (res) {
+          // 支付成功后的回调函数
+          alert('支付成功！');
+        },
+        fail: function (err) {
+          // 支付失败后的回调函数
+          alert('支付失败：' + err.errMsg);
+        }
+      });
+    });
+
+    wx.config({
+      debug: true,
+      appId: '<%= payParams.appId %>',
+      timestamp: '<%= payParams.timestamp %>',
+      nonceStr: '<%= payParams.nonceStr %>',
+      signature: '<%= payParams.signature %>',
+      jsApiList: [
+        'chooseWXPay'
+      ]
+    })
+    wx.ready(function () { 
+    });
+    wx.error(function (res) { 
+      console.error('微信配置错误：', res);
+    });
+  </script>
+</body>
+</html>
